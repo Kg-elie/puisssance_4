@@ -12,7 +12,7 @@
 #########################################
 
 import tkinter as tk
-from unittest import case
+
 
 
 #########################################
@@ -26,7 +26,7 @@ CASE = 6
 #########################################
 #  definitions des variables            #
 #########################################
-case_id = []
+mat_case = []
 
 
 
@@ -36,30 +36,56 @@ case_id = []
 
 def grillage(n,taille):
     """ cree une grille de n^2 case, et donne a chaque case une couleur selectionner en fonction du grain de sable qu'elle contient """
-    global case_id
+    global mat_case
     
-    if len(case_id) > 0:
-        for i in case_id:
+    if len(mat_case) > 0:
+        for i in mat_case:
             canvas.delete(i)
-        case_id = []
+        mat_case = []
     
     rythme = taille // n
     x = 0
     y = 3
-    
-    for i in range (n):
-        x = 3
+    for i in range(n):
+        x = 0
+        ligne = []
         for j in range(n):
-            case_id.append(canvas.create_oval((x,y),(x+rythme,y+rythme), fill="grey" ,outline="blue", width= 2 ))
+            ligne.append([canvas.create_oval((x,y),(x+rythme,y+rythme), fill="grey" ,outline="blue", width= 2 ),0])
             x += rythme
         y += rythme
+        mat_case.append(ligne)
 
-def mode_player(event):
+    # for i in range (n):
+    #     x = 3
+    #     for j in range(n):
+    #         mat_case.append(canvas.create_oval((x,y),(x+rythme,y+rythme), fill="grey" ,outline="blue", width= 2 ))
+    #         x += rythme
+        
+    
+
+
+
+def placage(event):
     """permet a l'utilisateur de donner des grains de sable lui-meme"""
     j = canvas.find_closest( event.x, event.y)
-    # print(j[0])
-    canvas.itemconfig(j[0], fill ="yellow")
+    colonne = j[0] % CASE -1
+    # print('lignes',colonne)
+    if  mat_case[-1][colonne][-1] == 0:
+        canvas.itemconfig(mat_case[-1][colonne][0], fill ="yellow")
+        mat_case[-1][colonne][-1] = 1
+        print(mat_case[-1][colonne][-1])
+    else:
+        print("hey", colonne)
+        for i in range(CASE):
+            if mat_case[i+1][colonne][-1] == 1:
+                canvas.itemconfig(mat_case[i][colonne][0], fill ="yellow")
+                mat_case[i][colonne][-1] = 1
+                return
 
+
+            
+
+    
     
         
         
@@ -76,9 +102,9 @@ def mode_player(event):
 
 
 racine = tk.Tk()
-racine.title("TAS DE SABLE")
+racine.title(" PUISSANCE 4")
 canvas = tk.Canvas(racine,width= TAILLE, height= TAILLE, bg= "blue")
 canvas.grid(column=0,row=0, rowspan= 20)
-canvas.bind("<Button-1>",mode_player)
+canvas.bind("<Button-1>",placage)
 grillage(CASE,TAILLE)
 racine.mainloop()
