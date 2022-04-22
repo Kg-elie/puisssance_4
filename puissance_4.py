@@ -12,6 +12,7 @@
 #########################################
 
 import tkinter as tk
+from unittest import case
 
 
 
@@ -73,9 +74,7 @@ def placage(event):
     if  mat_case[-1][colonne][-1] == 0:
         canvas.itemconfig(mat_case[-1][colonne][0], fill ="yellow")
         mat_case[-1][colonne][-1] = 1
-        print(mat_case[-1][colonne][-1])
     else:
-        print("hey", colonne)
         for i in range(CASE):
             if mat_case[i+1][colonne][-1] == 1:
                 canvas.itemconfig(mat_case[i][colonne][0], fill ="yellow")
@@ -83,13 +82,18 @@ def placage(event):
                 return
 
 
+def victoire():
+
+    for i in range(CASE):
+        for j in range(CASE):
+            if i 
+
             
 
     
     
         
-        
-    
+
 
 
 
