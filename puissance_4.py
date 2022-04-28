@@ -117,39 +117,42 @@ def inspection():
             if mat_case[i][colonne][-1] != 0:
                 if i <= len(mat_case)-4 and colonne <= len(mat_case)-4 :
                     if   mat_case[i][colonne][-1] == mat_case[i+1][colonne][-1] == mat_case[i+2][colonne][-1] == mat_case[i+3][colonne][-1]:
-                        print("victoire verticale",colonne)
+                        racine.after(1500,lambda : racine.quit())
                     elif mat_case[i][colonne][-1] == mat_case[i][colonne+1][-1] == mat_case[i][colonne+2][-1] == mat_case[i][colonne+3][-1]:
-                        print("victoire horizontale",i)
+
+                     racine.quit()
                     if mat_case[i][colonne][-1] == mat_case[i+1][colonne+1][-1] == mat_case[i+2][colonne+2][-1] == mat_case[i+3][colonne+3][-1]:
-                        print("victoire diagonale",colonne,i)
+                        racine.after(1500,lambda : racine.quit())
                         return
                     
-
                 elif i <= len(mat_case)-4 and colonne > len(mat_case)-4 :
                     if   mat_case[i][colonne][-1] == mat_case[i+1][colonne][-1] == mat_case[i+2][colonne][-1] == mat_case[i+3][colonne][-1]:
-                        print("victoire verticale",colonne)
+                        racine.after(1500,lambda : racine.quit())
                     elif mat_case[i][colonne][-1] == mat_case[i][colonne-1][-1] == mat_case[i][colonne-2][-1] == mat_case[i][colonne-3][-1]:
-                        print("victoire horizontale",i)
-                    elif mat_case[i][colonne][-1] == mat_case[i+1][colonne-1][-1] == mat_case[i+2][colonne-2][-1] == mat_case[i+3][colonne-3][-1]:
-                        print("victoire diagonale",colonne,i)
-                        return
 
+                     racine.quit()
+                    elif mat_case[i][colonne][-1] == mat_case[i+1][colonne-1][-1] == mat_case[i+2][colonne-2][-1] == mat_case[i+3][colonne-3][-1]:
+                        racine.after(1500,lambda : racine.quit())
+                        return
+                        
                 elif i > len(mat_case)-4 and colonne <= len(mat_case)-4 :
                     if   mat_case[i][colonne][-1] == mat_case[i-1][colonne][-1] == mat_case[i-2][colonne][-1] == mat_case[i-3][colonne][-1]:
-                        print("victoire verticale",colonne)
+                        racine.after(1500,lambda : racine.quit())
                     elif mat_case[i][colonne][-1] == mat_case[i][colonne+1][-1] == mat_case[i][colonne+2][-1] == mat_case[i][colonne+3][-1]:
-                        print("victoire horizontale",i)
+
+                     racine.quit()
                     if mat_case[i][colonne][-1] == mat_case[i-1][colonne+1][-1] == mat_case[i-2][colonne+2][-1] == mat_case[i-3][colonne+3][-1]:
-                        print("victoire diagonale",colonne,i)
+                        racine.after(1500,lambda : racine.quit())
                         return
 
                 elif i > len(mat_case)-4 and colonne > len(mat_case)-4 :
                     if   mat_case[i][colonne][-1] == mat_case[i-1][colonne][-1] == mat_case[i-2][colonne][-1] == mat_case[i-3][colonne][-1]:
-                        print("victoire verticale",colonne)
+                        racine.after(1500,lambda : racine.quit())
                     elif mat_case[i][colonne][-1] == mat_case[i][colonne-1][-1] == mat_case[i][colonne-2][-1] == mat_case[i][colonne-3][-1]:
-                        print("victoire horizontale",i)
+
+                     racine.quit()
                     elif mat_case[i][colonne][-1] == mat_case[i-1][colonne-1][-1] == mat_case[i-2][colonne-2][-1] == mat_case[i-3][colonne-3][-1]:
-                        print("victoire diagonale",colonne,i)
+                        racine.after(1500,lambda : racine.quit())
                         return
 
 
@@ -170,16 +173,44 @@ def annuler():
 
 def copie():
     """copie la matrice d'une configuration dans un fichier text"""
-    global text
+    global text, manche
+    fic = open(text.get()+".txt","w")
+    fic.write(str(len(mat_case)) +  "\n")
+    fic.write(str(manche) + "\n")
+    for i in range(len(mat_case)):
+        for j in range(len(mat_case)):
+            fic.write(str(mat_case[i][j][0])+ " "+ str(mat_case[i][j][1]) + " " + str(mat_mouvement[i][j]) + "\n")
+    fic.close()
+
  
     
 
 def recuperation():
     """permet de recuperer une configuration sauvegarder et la generer"""
-    global mat_case, text
+    global mat_case, text, manche
+    fic = open(text.get()+".txt","r")
+    matrice = fic.readlines()
+    ligne = 2
+    tale = matrice[0]
+    manche = int(matrice[1])
+    for i in range(len(mat_case)):
+        for j in range(len(mat_case)):
+            donne = matrice[ligne]
+            donne = donne.split()
+            mat_case[i][j] = [int(donne[0]),int(donne[1])]
+            mat_mouvement[i][j] = int(donne[2])
+            ligne += 1
+    coloriage()
+
+
+def coloriage():
+    for i in range(len(mat_case)):
+        for j in range(len(mat_case)):
+            if mat_case[i][j][1] == 1:
+                canvas.itemconfig(mat_case[i][j][0],fill="yellow")
+            elif mat_case[i][j][1] == 2:
+                canvas.itemconfig(mat_case[i][j][0],fill="red")
     
-
-
 
 
 #########################################
@@ -203,4 +234,4 @@ barre = tk.Entry(racine,textvariable= text, bd= 3)
 barre.grid()
 grillage(CASE,TAILLE)
 racine.mainloop()
-print(mat_case)
+print(mat_mouvement)
