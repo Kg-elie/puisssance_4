@@ -28,6 +28,7 @@ CASE = 6
 #  definitions des variables            #
 #########################################
 mat_case = []
+joueur = True
 
 
 
@@ -68,31 +69,79 @@ def grillage(n,taille):
 
 def placage(event):
     """permet a l'utilisateur de donner des grains de sable lui-meme"""
+    global joueur
     j = canvas.find_closest( event.x, event.y)
     colonne = j[0] % CASE -1
+    if colonne == -1:
+        colonne = len(mat_case)-1
     # print('lignes',colonne)
     if  mat_case[-1][colonne][-1] == 0:
-        canvas.itemconfig(mat_case[-1][colonne][0], fill ="yellow")
-        mat_case[-1][colonne][-1] = 1
+        if joueur:
+            canvas.itemconfig(mat_case[-1][colonne][0], fill ="yellow")
+            mat_case[-1][colonne][-1] = 1
+        else:
+            canvas.itemconfig(mat_case[-1][colonne][0], fill ="red")
+            mat_case[-1][colonne][-1] = 2
+        inspection()
+        joueur = not joueur
+        return
+        
     else:
         for i in range(CASE):
-            if mat_case[i+1][colonne][-1] == 1:
-                canvas.itemconfig(mat_case[i][colonne][0], fill ="yellow")
-                mat_case[i][colonne][-1] = 1
+            if mat_case[i+1][colonne][-1] != 0:
+                if joueur:
+                    canvas.itemconfig(mat_case[i][colonne][0], fill ="yellow")
+                    mat_case[i][colonne][-1] = 1
+                else:
+                    canvas.itemconfig(mat_case[i][colonne][0], fill ="red")
+                    mat_case[i][colonne][-1] = 2
+                inspection()
+                joueur = not joueur
                 return
 
 
-def victoire():
-
-    for i in range(CASE):
-        for j in range(CASE):
-            if i 
-
-            
-
+def inspection():
     
-    
-        
+    for i in range (len(mat_case)):
+
+        for colonne in range(len(mat_case)):
+            if mat_case[i][colonne][-1] != 0:
+                if i <= len(mat_case)-4 and colonne <= len(mat_case)-4 :
+                    if   mat_case[i][colonne][-1] == mat_case[i+1][colonne][-1] == mat_case[i+2][colonne][-1] == mat_case[i+3][colonne][-1]:
+                        print("victoire verticale",colonne)
+                    elif mat_case[i][colonne][-1] == mat_case[i][colonne+1][-1] == mat_case[i][colonne+2][-1] == mat_case[i][colonne+3][-1]:
+                        print("victoire horizontale",i)
+                    if mat_case[i][colonne][-1] == mat_case[i+1][colonne+1][-1] == mat_case[i+2][colonne+2][-1] == mat_case[i+3][colonne+3][-1]:
+                        print("victoire diagonale",colonne,i)
+                        return
+                    
+
+                elif i <= len(mat_case)-4 and colonne > len(mat_case)-4 :
+                    if   mat_case[i][colonne][-1] == mat_case[i+1][colonne][-1] == mat_case[i+2][colonne][-1] == mat_case[i+3][colonne][-1]:
+                        print("victoire verticale",colonne)
+                    elif mat_case[i][colonne][-1] == mat_case[i][colonne-1][-1] == mat_case[i][colonne-2][-1] == mat_case[i][colonne-3][-1]:
+                        print("victoire horizontale",i)
+                    elif mat_case[i][colonne][-1] == mat_case[i+1][colonne-1][-1] == mat_case[i+2][colonne-2][-1] == mat_case[i+3][colonne-3][-1]:
+                        print("victoire diagonale",colonne,i)
+                        return
+
+                elif i > len(mat_case)-4 and colonne <= len(mat_case)-4 :
+                    if   mat_case[i][colonne][-1] == mat_case[i-1][colonne][-1] == mat_case[i-2][colonne][-1] == mat_case[i-3][colonne][-1]:
+                        print("victoire verticale",colonne)
+                    elif mat_case[i][colonne][-1] == mat_case[i][colonne+1][-1] == mat_case[i][colonne+2][-1] == mat_case[i][colonne+3][-1]:
+                        print("victoire horizontale",i)
+                    if mat_case[i][colonne][-1] == mat_case[i-1][colonne+1][-1] == mat_case[i-2][colonne+2][-1] == mat_case[i-3][colonne+3][-1]:
+                        print("victoire diagonale",colonne,i)
+                        return
+
+                elif i > len(mat_case)-4 and colonne > len(mat_case)-4 :
+                    if   mat_case[i][colonne][-1] == mat_case[i-1][colonne][-1] == mat_case[i-2][colonne][-1] == mat_case[i-3][colonne][-1]:
+                        print("victoire verticale",colonne)
+                    elif mat_case[i][colonne][-1] == mat_case[i][colonne-1][-1] == mat_case[i][colonne-2][-1] == mat_case[i][colonne-3][-1]:
+                        print("victoire horizontale",i)
+                    elif mat_case[i][colonne][-1] == mat_case[i-1][colonne-1][-1] == mat_case[i-2][colonne-2][-1] == mat_case[i-3][colonne-3][-1]:
+                        print("victoire diagonale",colonne,i)
+                        return
 
 
 
@@ -112,3 +161,4 @@ canvas.grid(column=0,row=0, rowspan= 20)
 canvas.bind("<Button-1>",placage)
 grillage(CASE,TAILLE)
 racine.mainloop()
+print(mat_case)
