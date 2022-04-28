@@ -13,7 +13,7 @@
 
 import tkinter as tk
 import random as rd
-from xmlrpc.client import TRANSPORT_ERROR
+import tkinter.messagebox as tkm
 
 
 
@@ -167,6 +167,21 @@ def annuler():
 
 
 
+
+def copie():
+    """copie la matrice d'une configuration dans un fichier text"""
+    global text
+ 
+    
+
+def recuperation():
+    """permet de recuperer une configuration sauvegarder et la generer"""
+    global mat_case, text
+    
+
+
+
+
 #########################################
 # programme principal                   #
 #########################################
@@ -179,7 +194,13 @@ canvas.grid(column=0,row=0, rowspan= 20)
 canvas.bind("<Button-1>",placage)
 retour = tk.Button(racine,text="retour",command=annuler)
 retour.grid()
-
+sauvegarde = tk.Button(racine, text="sauvegarder",command= copie)
+sauvegarde.grid()
+charger = tk.Button(racine,text="charger", command = recuperation)
+charger.grid()
+text = tk.StringVar()
+barre = tk.Entry(racine,textvariable= text, bd= 3)
+barre.grid()
 grillage(CASE,TAILLE)
 racine.mainloop()
-print(mat_mouvement)
+print(mat_case)
