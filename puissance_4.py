@@ -12,7 +12,8 @@
 #########################################
 
 import tkinter as tk
-from unittest import case
+import random as rd
+from xmlrpc.client import TRANSPORT_ERROR
 
 
 
@@ -28,7 +29,9 @@ CASE = 6
 #  definitions des variables            #
 #########################################
 mat_case = []
-joueur = True
+joueur = rd.randint(False,True)
+mat_mouvement = []
+manche = 0
 
 
 
@@ -38,7 +41,7 @@ joueur = True
 
 def grillage(n,taille):
     """ cree une grille de n^2 case, et donne a chaque case une couleur selectionner en fonction du grain de sable qu'elle contient """
-    global mat_case
+    global mat_case,mat_mouvement
     
     if len(mat_case) > 0:
         for i in mat_case:
@@ -57,11 +60,12 @@ def grillage(n,taille):
         y += rythme
         mat_case.append(ligne)
 
-    # for i in range (n):
-    #     x = 3
-    #     for j in range(n):
-    #         mat_case.append(canvas.create_oval((x,y),(x+rythme,y+rythme), fill="grey" ,outline="blue", width= 2 ))
-    #         x += rythme
+    for i in range (n):
+        ligne = []
+        for j in range(n):
+            ligne.append(0)
+        mat_mouvement.append(ligne)
+            
         
     
 
@@ -69,12 +73,15 @@ def grillage(n,taille):
 
 def placage(event):
     """permet a l'utilisateur de donner des grains de sable lui-meme"""
-    global joueur
+    global joueur, manche
+    manche += 1
     j = canvas.find_closest( event.x, event.y)
     colonne = j[0] % CASE -1
     if colonne == -1:
         colonne = len(mat_case)-1
-    # print('lignes',colonne)
+    if mat_case[0][colonne][-1] != 0:
+        joueur = not joueur
+        return
     if  mat_case[-1][colonne][-1] == 0:
         if joueur:
             canvas.itemconfig(mat_case[-1][colonne][0], fill ="yellow")
@@ -84,6 +91,7 @@ def placage(event):
             mat_case[-1][colonne][-1] = 2
         inspection()
         joueur = not joueur
+        mat_mouvement[-1][colonne] = manche
         return
         
     else:
@@ -97,6 +105,7 @@ def placage(event):
                     mat_case[i][colonne][-1] = 2
                 inspection()
                 joueur = not joueur
+                mat_mouvement[i][colonne] = manche
                 return
 
 
@@ -145,7 +154,16 @@ def inspection():
 
 
 
-
+def annuler():
+    global manche, joueur
+    for i in range(len(mat_mouvement)):
+        for j in range(len(mat_mouvement)):
+            if  mat_mouvement[i][j] == manche:
+                mat_case[i][j][-1] = 0
+                mat_mouvement[i][j] = 0
+                canvas.itemconfig(mat_case[i][j][0], fill ="grey")
+    manche -= 1
+    joueur = not joueur
 
 
 
@@ -159,6 +177,9 @@ racine.title(" PUISSANCE 4")
 canvas = tk.Canvas(racine,width= TAILLE, height= TAILLE, bg= "blue")
 canvas.grid(column=0,row=0, rowspan= 20)
 canvas.bind("<Button-1>",placage)
+retour = tk.Button(racine,text="retour",command=annuler)
+retour.grid()
+
 grillage(CASE,TAILLE)
 racine.mainloop()
-print(mat_case)
+print(mat_mouvement)
