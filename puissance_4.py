@@ -193,6 +193,7 @@ def copie():
     fic = open(text.get()+".txt","w")
     fic.write(str(len(mat_case)) +  "\n")
     fic.write(str(manche) + "\n")
+    fic.write(str(joueur) +"\n")
     for i in range(len(mat_case)):
         for j in range(len(mat_case)):
             fic.write(str(mat_case[i][j][0])+ " "+ str(mat_case[i][j][1]) + " " + str(mat_mouvement[i][j]) + "\n")
@@ -203,12 +204,13 @@ def copie():
 
 def recuperation():
     """permet de recuperer une configuration sauvegarder et la generer"""
-    global mat_case, text, manche
+    global mat_case, text, manche,joueur
     fic = open(text.get()+".txt","r")
     matrice = fic.readlines()
-    ligne = 2
+    ligne = 3
     tale = matrice[0]
     manche = int(matrice[1])
+    joueur = bool(matrice[2])
     for i in range(len(mat_case)):
         for j in range(len(mat_case)):
             donne = matrice[ligne]
@@ -226,6 +228,9 @@ def coloriage():
                 canvas.itemconfig(mat_case[i][j][0],fill="yellow")
             elif mat_case[i][j][1] == 2:
                 canvas.itemconfig(mat_case[i][j][0],fill="red")
+            else:
+                canvas.itemconfig(mat_case[i][j][0],fill="grey")
+
     
 
 
