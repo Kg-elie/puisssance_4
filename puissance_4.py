@@ -5,7 +5,10 @@
 # Iram MADANI FOUATIH
 # https://github.com/uvsq22101259/puisssance_4
 #########################################
-
+# commentaire
+"""le code ne fonctionne pas si la grille est de 4*4 car il peut prendre\
+    les index de la matrice en commençant par le dernier\
+    ce qui fausse les placements"""
 
 #########################################
 # importation librairie                 #
@@ -29,19 +32,20 @@ CASE = 6
 #  definitions des variables            #
 #########################################
 mat_case = []
-joueur = rd.randint(False,True)
+joueur = rd.randint(False, True)
 mat_mouvement = []
 manche = 0
-
+nbr_piece = 0
 
 
 #########################################
 # definitions des fonctions             #
 #########################################
 
-def grillage(n,taille):
-    """ cree une grille de n^2 case, et donne a chaque case une couleur selectionner en fonction du grain de sable qu'elle contient """
-    global mat_case,mat_mouvement
+def grillage(n, taille):
+    """ cree une grille de n^2 case, et donne a chaque case une couleur selectionner en fonction \
+        du grain de sable qu'elle contient """
+    global mat_case, mat_mouvement
     
     if len(mat_case) > 0:
         for i in mat_case:
@@ -55,7 +59,7 @@ def grillage(n,taille):
         x = 0
         ligne = []
         for j in range(n):
-            ligne.append([canvas.create_oval((x,y),(x+rythme,y+rythme), fill="grey" ,outline="blue", width= 2 ),0])
+            ligne.append([canvas.create_oval((x, y), (x+rythme, y+rythme), fill="grey", outline="blue", width= 2), 0])
             x += rythme
         y += rythme
         mat_case.append(ligne)
@@ -98,10 +102,10 @@ def placage(event):
         for i in range(CASE):
             if mat_case[i+1][colonne][-1] != 0:
                 if joueur:
-                    canvas.itemconfig(mat_case[i][colonne][0], fill ="yellow")
+                    canvas.itemconfig(mat_case[i][colonne][0], fill = "yellow")
                     mat_case[i][colonne][-1] = 1
                 else:
-                    canvas.itemconfig(mat_case[i][colonne][0], fill ="red")
+                    canvas.itemconfig(mat_case[i][colonne][0], fill = "red")
                     mat_case[i][colonne][-1] = 2
                 inspection()
                 joueur = not joueur
@@ -110,48 +114,60 @@ def placage(event):
 
 
 def inspection():
-    
+    global nbr_piece
+    if nbr_piece == len(mat_case)**2:
+        tkm.showwarning("attention", "vous avez plus de place pour jouer")
+        racine.quit()
     for i in range (len(mat_case)):
 
         for colonne in range(len(mat_case)):
             if mat_case[i][colonne][-1] != 0:
+                nbr_piece += 1
                 if i <= len(mat_case)-4 and colonne <= len(mat_case)-4 :
                     if   mat_case[i][colonne][-1] == mat_case[i+1][colonne][-1] == mat_case[i+2][colonne][-1] == mat_case[i+3][colonne][-1]:
+                        print("verticale")
                         racine.after(1500,lambda : racine.quit())
                     elif mat_case[i][colonne][-1] == mat_case[i][colonne+1][-1] == mat_case[i][colonne+2][-1] == mat_case[i][colonne+3][-1]:
-
-                     racine.quit()
+                        print("horizontal")
+                        racine.after(1500,lambda : racine.quit())
                     if mat_case[i][colonne][-1] == mat_case[i+1][colonne+1][-1] == mat_case[i+2][colonne+2][-1] == mat_case[i+3][colonne+3][-1]:
+                        print("diagonale",i,colonne,"a")
                         racine.after(1500,lambda : racine.quit())
                         return
                     
                 elif i <= len(mat_case)-4 and colonne > len(mat_case)-4 :
                     if   mat_case[i][colonne][-1] == mat_case[i+1][colonne][-1] == mat_case[i+2][colonne][-1] == mat_case[i+3][colonne][-1]:
+                        print("verticale")
                         racine.after(1500,lambda : racine.quit())
                     elif mat_case[i][colonne][-1] == mat_case[i][colonne-1][-1] == mat_case[i][colonne-2][-1] == mat_case[i][colonne-3][-1]:
-
-                     racine.quit()
+                        print("horizontal")
+                        racine.after(1500,lambda : racine.quit())
                     elif mat_case[i][colonne][-1] == mat_case[i+1][colonne-1][-1] == mat_case[i+2][colonne-2][-1] == mat_case[i+3][colonne-3][-1]:
+                        print("diagonale",i,colonne,"b")
                         racine.after(1500,lambda : racine.quit())
                         return
                         
                 elif i > len(mat_case)-4 and colonne <= len(mat_case)-4 :
                     if   mat_case[i][colonne][-1] == mat_case[i-1][colonne][-1] == mat_case[i-2][colonne][-1] == mat_case[i-3][colonne][-1]:
+                        print("verticale")
                         racine.after(1500,lambda : racine.quit())
                     elif mat_case[i][colonne][-1] == mat_case[i][colonne+1][-1] == mat_case[i][colonne+2][-1] == mat_case[i][colonne+3][-1]:
-
-                     racine.quit()
+                        print("horizontal")
+                        racine.after(1500,lambda : racine.quit())
                     if mat_case[i][colonne][-1] == mat_case[i-1][colonne+1][-1] == mat_case[i-2][colonne+2][-1] == mat_case[i-3][colonne+3][-1]:
+                        print("diagonale",i,colonne,"c")
                         racine.after(1500,lambda : racine.quit())
                         return
 
                 elif i > len(mat_case)-4 and colonne > len(mat_case)-4 :
                     if   mat_case[i][colonne][-1] == mat_case[i-1][colonne][-1] == mat_case[i-2][colonne][-1] == mat_case[i-3][colonne][-1]:
+                        print("verticale")
                         racine.after(1500,lambda : racine.quit())
                     elif mat_case[i][colonne][-1] == mat_case[i][colonne-1][-1] == mat_case[i][colonne-2][-1] == mat_case[i][colonne-3][-1]:
-
-                     racine.quit()
+                        print("horizontal")
+                        racine.after(1500,lambda : racine.quit())
                     elif mat_case[i][colonne][-1] == mat_case[i-1][colonne-1][-1] == mat_case[i-2][colonne-2][-1] == mat_case[i-3][colonne-3][-1]:
+                        print("diagonale",i,colonne,"d")
                         racine.after(1500,lambda : racine.quit())
                         return
 
