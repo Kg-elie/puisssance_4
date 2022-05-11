@@ -1,3 +1,10 @@
+groupe BI TD 1
+ Elie KANGA
+ Sarah Medeneche
+ Iram MADANI FOUATIH
+ https://github.com/uvsq22101259/puisssance_4
+ 
+ 
 Bonjour, ce repository contient le projet Puissance 4. C'est un projet qui a pour but d'être évaluer à la fin de la première année de licence. Nous avons pour objectif de créer un puissance 4 avec toutes les règles et éventualités qui vont avec.
 
 
