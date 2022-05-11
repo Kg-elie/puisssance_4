@@ -42,9 +42,8 @@ nbr_piece = 0
 #########################################
 
 def grillage(n, taille):
-    """ cree une grille de n^2 case, et donne a chaque case une couleur\
-         selectionner en fonction
-        du grain de sable qu'elle contient """
+    """ cree une grille de n**2 case , contenant les jetons\
+        et une matrice n**2 qui contiendra les mouvement de ces jetons """
     global mat_case, mat_mouvement
 
     if len(mat_case) > 0:
@@ -72,7 +71,7 @@ def grillage(n, taille):
 
 
 def placage(event):
-    """permet a l'utilisateur de donner des grains de sable lui-meme"""
+    """permet aux joueurs de placer les jeton et donne l'effet de gravité"""
     global joueur, manche, nbr_piece
     manche += 1
     j = canvas.find_closest(event.x, event.y)
@@ -110,9 +109,10 @@ def placage(event):
 
 
 def inspection():
+    """inspecte toute la liste pour savoir si il y a un alignement."""
     global nbr_piece, manche
     if manche == len(mat_case)**2:
-        tkm.showwarning("attention", "vous avez plus de place pour jouer")
+        tkm.showwarning("attention", "vous avez plus de place pour jouer.")
         racine.quit()
     for i in range(len(mat_case)):
 
@@ -169,6 +169,7 @@ def inspection():
 
 
 def annuler():
+    """permet de revenir sur la manche précédente."""
     global manche, joueur
     for i in range(len(mat_mouvement)):
         for j in range(len(mat_mouvement)):
@@ -181,8 +182,11 @@ def annuler():
 
 
 def copie():
-    """copie la matrice d'une configuration dans un fichier text"""
+    """copie la matrice de la partie dans un fichier text."""
     global text, manche
+    if text.get() == "":
+        tkm.showwarning("attention", "veiller entré un nom à la sauvegarde.")
+        return
     fic = open(text.get()+".txt", "w")
     fic.write(str(len(mat_case)) + "\n")
     fic.write(str(manche) + "\n")
@@ -194,8 +198,11 @@ def copie():
 
 
 def recuperation():
-    """permet de recuperer une configuration sauvegarder et la generer"""
+    """permet de recuperer une partie sauvegarder et la generer."""
     global mat_case, text, manche, joueur
+    if text.get() == "":
+        tkm.showwarning("attention", "veiller entré le nom de la sauvegarde.")
+        return
     fic = open(text.get()+".txt", "r")
     matrice = fic.readlines()
     ligne = 3
@@ -213,6 +220,7 @@ def recuperation():
 
 
 def coloriage():
+    """permet de colorier les canvas avec les informations disponible dans la matrice "mat_case"."""
     for i in range(len(mat_case)):
         for j in range(len(mat_case)):
             if mat_case[i][j][1] == 1:
@@ -229,18 +237,24 @@ def coloriage():
 
 racine = tk.Tk()
 racine.title(" PUISSANCE 4")
+
 canvas = tk.Canvas(racine, width=TAILLE, height=TAILLE, bg="blue")
 canvas.grid(column=0, row=0, rowspan=20)
+
 canvas.bind("<Button-1>", placage)
+
 retour = tk.Button(racine, text="retour", command=annuler)
 retour.grid()
+
 sauvegarde = tk.Button(racine, text="sauvegarder", command=copie)
 sauvegarde.grid()
+
 charger = tk.Button(racine, text="charger", command=recuperation)
 charger.grid()
+
 text = tk.StringVar()
 barre = tk.Entry(racine, textvariable=text, bd=3)
 barre.grid()
+
 grillage(CASE, TAILLE)
 racine.mainloop()
-print(mat_mouvement)
