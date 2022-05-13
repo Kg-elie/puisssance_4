@@ -38,7 +38,7 @@ Le code peut se terminer de quatre façons :
 
 Il permet de charger une sauvegarde, mais il faut d'abord écrire le nom de celle-ci dans la barre.
 
-### le bouton charger
+### le bouton sauvegarder
 
 Il permet de sauvegarder une partie, mais il faut d'abord écrire le nom de celle-ci dans la barre.
 
