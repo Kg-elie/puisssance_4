@@ -300,9 +300,14 @@ text = tk.StringVar()
 barre = tk.Entry(racine, textvariable=text, bd=3)
 barre.grid()
 
-tour_joueur = tk.Canvas(racine, width=40, height=40, bg="black")
+tour_joueur = tk.Canvas(racine, width=70, height=40, bg="black")
+tour_joueur_texte = tour_joueur.create_text(35, 20, text="joueur", font=("\
+    courier"), fill="black")
 tour_joueur.grid(column=1, row=1)
 tour()
-
+titre_jeu = tk.Canvas(racine, width=140, height=40, bg="grey")
+titre_jeu_texte = titre_jeu.create_text(70, 20, text="Puissance 4", font=("\
+    courier"), fill="black")
+titre_jeu.grid(column=2, row=1)
 grillage(CASE, TAILLE)
 racine.mainloop()
